@@ -78,13 +78,26 @@
 	    function TRexGame(stage, renderer) {
 	        this.renderer = renderer;
 	        this.stage = stage;
-	        this.way = new PIXI.Sprite(PIXI.loader.resources["path"].texture);
-	        this.way.position.set(0, 130);
-	        this.way.width = this.renderer.width;
+	        this.road = new PIXI.Sprite(PIXI.loader.resources["path"].texture);
+	        this.road.position.set(0, 130);
+	        this.road.width = this.renderer.width * 2;
 	        this.dino = new Dino(this.stage);
 	        this.dino.showTRex();
-	        this.stage.addChild(this.way);
+	        this.stage.addChild(this.road);
+	        this.animateRoad();
 	    }
+	    TRexGame.prototype.animateRoad = function () {
+	        var _this = this;
+	        var i = 0;
+	        setInterval(function () {
+	            _this.road.x--;
+	            i++;
+	            if (i == _this.road.width / 2) {
+	                _this.road.x = 0;
+	                i = 0;
+	            }
+	        }, 10);
+	    };
 	    return TRexGame;
 	}());
 	module.exports = TRexGame;
