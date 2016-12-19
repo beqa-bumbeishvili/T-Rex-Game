@@ -57,13 +57,15 @@
 	///<reference path="../../lib/pixi.js.d.ts" />
 	var TRexGame = __webpack_require__(2);
 	var autoDetectRenderer = PIXI.autoDetectRenderer, loader = PIXI.loader, resources = PIXI.loader.resources, Sprite = PIXI.Sprite;
-	var stage = new PIXI.Container(), renderer = PIXI.autoDetectRenderer(700, 600, { backgroundColor: 0x1099bb });
+	var stage = new PIXI.Container(), renderer = PIXI.autoDetectRenderer(600, 150, { backgroundColor: 0xF7F7F7 });
 	document.body.appendChild(renderer.view);
 	setInterval(function () { renderer.render(stage); }, 30);
-	var clasi = new TRexGame(stage, renderer);
 	loader
-	    .add("background", "app/assets/resources/background.jpg")
-	    .load(function () { clasi.experimentalMethod(); });
+	    .add("T-RexNormal", "app/assets/dino/dino.png")
+	    .add("path", "app/assets/way/path.png")
+	    .load(function () {
+	    var game = new TRexGame(stage, renderer);
+	});
 
 
 /***/ },
@@ -76,12 +78,13 @@
 	    function TRexGame(stage, renderer) {
 	        this.renderer = renderer;
 	        this.stage = stage;
-	        this.dino = new Dino();
+	        this.way = new PIXI.Sprite(PIXI.loader.resources["path"].texture);
+	        this.way.position.set(0, 130);
+	        this.way.width = this.renderer.width;
+	        this.dino = new Dino(this.stage);
+	        this.dino.showTRex();
+	        this.stage.addChild(this.way);
 	    }
-	    TRexGame.prototype.experimentalMethod = function () {
-	        this.stage.addChild(new PIXI.Sprite(PIXI.loader.resources["background"].texture));
-	        console.log('text from experimentalMethod');
-	    };
 	    return TRexGame;
 	}());
 	module.exports = TRexGame;
@@ -93,9 +96,16 @@
 
 	"use strict";
 	var Dino = (function () {
-	    function Dino() {
-	        this.name = 't-rex';
+	    function Dino(stage) {
+	        this.stage = stage;
+	        this.visual = new PIXI.Sprite(PIXI.loader.resources["T-RexNormal"].texture);
+	        this.visual.width = 42;
+	        this.visual.height = 45;
+	        this.visual.position.set(30, 80);
 	    }
+	    Dino.prototype.showTRex = function () {
+	        this.stage.addChild(this.visual);
+	    };
 	    return Dino;
 	}());
 	module.exports = Dino;
