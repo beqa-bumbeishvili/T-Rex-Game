@@ -64,6 +64,9 @@
 	    .add("T-RexNormal", "app/assets/dino/dino.png")
 	    .add("T-RexStep1", "app/assets/dino/step1.png")
 	    .add("T-RexStep2", "app/assets/dino/step2.png")
+	    .add("one", "app/assets/obstacles/1.png")
+	    .add("two", "app/assets/obstacles/2.png")
+	    .add("three", "app/assets/obstacles/3.png")
 	    .add("path", "app/assets/way/path.png")
 	    .load(function () {
 	    var game = new TRexGame(stage, renderer);
@@ -83,11 +86,30 @@
 	        this.road = new PIXI.Sprite(PIXI.loader.resources["path"].texture);
 	        this.road.position.set(0, 130);
 	        this.road.width = this.renderer.width * 2;
+	        this.obstacle = new PIXI.Sprite(PIXI.loader.resources["one"].texture);
+	        this.obstacle.position.set(580, 108);
 	        this.dino = new Dino(this.stage);
-	        this.dino.animateTRex();
 	        this.stage.addChild(this.road);
+	        this.stage.addChild(this.obstacle);
+	        this.dino.animateTRex();
 	        this.animateRoad();
+	        this.showObstacles();
+	        this.jumpEvent();
 	    }
+	    TRexGame.prototype.showObstacles = function () {
+	        var _this = this;
+	        var i = 0;
+	        setInterval(function () {
+	            i++;
+	            _this.obstacle.x--;
+	            /* if (_this.dino.visual.x + _this.dino.visual.width > _this.obstacle.x && _this.dino.visual.x < _this.obstacle.x + _this.obstacle.width)
+	                 if (_this.dino.visual.y - _this.dino.height <= _this.obstacle.y)
+	                     alert('hit!');*/
+	            if (i == 1200) {
+	                i = 0;
+	            }
+	        }, 10);
+	    };
 	    TRexGame.prototype.animateRoad = function () {
 	        var _this = this;
 	        var i = 0;
@@ -99,6 +121,23 @@
 	                i = 0;
 	            }
 	        }, 10);
+	    };
+	    TRexGame.prototype.jumpEvent = function () {
+	        var _this = this;
+	        window.addEventListener("keydown", function (event) {
+	            switch (event.keyCode) {
+	                case 32: {
+	                    if (_this.dino.jumpInterval == false)
+	                        _this.dino.jump();
+	                    break;
+	                }
+	                case 38: {
+	                    if (_this.dino.jumpInterval == false)
+	                        _this.dino.jump();
+	                    break;
+	                }
+	            }
+	        });
 	    };
 	    return TRexGame;
 	}());
@@ -113,39 +152,65 @@
 	var Dino = (function () {
 	    function Dino(stage) {
 	        this.stage = stage;
-	        this.visual = new PIXI.Sprite(PIXI.loader.resources["T-RexNormal"].texture);
-	        this.visual.width = 42;
-	        this.visual.height = 45;
-	        this.visual.position.set(30, 80);
+	        this.setDefaultAppearance();
 	        this.firstStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep1"].texture);
 	        this.firstStep.width = 42;
 	        this.firstStep.height = 45;
 	        this.firstStep.position.set(30, 80);
+	        this.firstStep.visible = false;
 	        this.secondStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep2"].texture);
 	        this.secondStep.width = 42;
 	        this.secondStep.height = 45;
 	        this.secondStep.position.set(30, 80);
-	        this.stage.addChild(this.visual);
+	        this.secondStep.visible = false;
+	        this.jumpInterval = false;
+	        this.stage.addChild(this.defaultAppearance);
 	        this.stage.addChild(this.firstStep);
 	        this.stage.addChild(this.secondStep);
 	    }
+	    Dino.prototype.setDefaultAppearance = function () {
+	        this.defaultAppearance = new PIXI.Sprite(PIXI.loader.resources["T-RexNormal"].texture);
+	        this.defaultAppearance.width = 42;
+	        this.defaultAppearance.height = 45;
+	        this.defaultAppearance.position.set(30, 80);
+	    };
 	    Dino.prototype.animateTRex = function () {
 	        var _this = this;
 	        var i = 0;
-	        _this.visual.visible = false;
-	        _this.firstStep.visible = false;
-	        _this.secondStep.visible = false;
-	        setInterval(function () {
+	        this.walkInterval = setInterval(function () {
 	            i++;
 	            if (i % 2 == 0) {
-	                _this.firstStep.visible = true;
+	                _this.defaultAppearance.visible = false;
 	                _this.secondStep.visible = false;
+	                _this.firstStep.visible = true;
 	            }
 	            else {
 	                _this.firstStep.visible = false;
 	                _this.secondStep.visible = true;
 	            }
 	        }, 100);
+	    };
+	    Dino.prototype.jump = function () {
+	        clearInterval(this.walkInterval);
+	        this.firstStep.visible = false;
+	        this.secondStep.visible = false;
+	        this.defaultAppearance.visible = true;
+	        var _this = this;
+	        var i = 0;
+	        this.jumpInterval = setInterval(function () {
+	            i++;
+	            if (i < 40) {
+	                _this.defaultAppearance.y -= 2;
+	            }
+	            else {
+	                _this.defaultAppearance.y += 2;
+	            }
+	            if (_this.defaultAppearance.y == 80) {
+	                _this.animateTRex();
+	                clearInterval(_this.jumpInterval);
+	                _this.jumpInterval = false;
+	            }
+	        }, 10);
 	    };
 	    return Dino;
 	}());

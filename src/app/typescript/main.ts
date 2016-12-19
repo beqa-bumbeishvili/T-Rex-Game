@@ -13,6 +13,9 @@ loader
     .add("T-RexNormal", "app/assets/dino/dino.png")
     .add("T-RexStep1", "app/assets/dino/step1.png")
     .add("T-RexStep2", "app/assets/dino/step2.png")
+    .add("one", "app/assets/obstacles/1.png")
+    .add("two", "app/assets/obstacles/2.png")
+    .add("three", "app/assets/obstacles/3.png")
     .add("path", "app/assets/way/path.png")
     .load(function () { 
     let game = new TRexGame(stage, renderer);
