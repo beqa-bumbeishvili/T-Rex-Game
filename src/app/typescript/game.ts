@@ -14,7 +14,7 @@ class TRexGame {
         this.road.position.set(0, 130);
         this.road.width = this.renderer.width * 2;
         this.dino = new Dino(this.stage);
-        this.dino.showTRex();
+        this.dino.animateTRex();
         this.stage.addChild(this.road);
         this.animateRoad();
     }

@@ -11,6 +11,8 @@ document.body.appendChild(renderer.view);
 setInterval(function () { renderer.render(stage); }, 30);
 loader
     .add("T-RexNormal", "app/assets/dino/dino.png")
+    .add("T-RexStep1", "app/assets/dino/step1.png")
+    .add("T-RexStep2", "app/assets/dino/step2.png")
     .add("path", "app/assets/way/path.png")
     .load(function () { 
     let game = new TRexGame(stage, renderer);

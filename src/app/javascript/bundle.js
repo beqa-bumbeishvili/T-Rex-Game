@@ -62,6 +62,8 @@
 	setInterval(function () { renderer.render(stage); }, 30);
 	loader
 	    .add("T-RexNormal", "app/assets/dino/dino.png")
+	    .add("T-RexStep1", "app/assets/dino/step1.png")
+	    .add("T-RexStep2", "app/assets/dino/step2.png")
 	    .add("path", "app/assets/way/path.png")
 	    .load(function () {
 	    var game = new TRexGame(stage, renderer);
@@ -82,7 +84,7 @@
 	        this.road.position.set(0, 130);
 	        this.road.width = this.renderer.width * 2;
 	        this.dino = new Dino(this.stage);
-	        this.dino.showTRex();
+	        this.dino.animateTRex();
 	        this.stage.addChild(this.road);
 	        this.animateRoad();
 	    }
@@ -115,9 +117,35 @@
 	        this.visual.width = 42;
 	        this.visual.height = 45;
 	        this.visual.position.set(30, 80);
-	    }
-	    Dino.prototype.showTRex = function () {
+	        this.firstStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep1"].texture);
+	        this.firstStep.width = 42;
+	        this.firstStep.height = 45;
+	        this.firstStep.position.set(30, 80);
+	        this.secondStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep2"].texture);
+	        this.secondStep.width = 42;
+	        this.secondStep.height = 45;
+	        this.secondStep.position.set(30, 80);
 	        this.stage.addChild(this.visual);
+	        this.stage.addChild(this.firstStep);
+	        this.stage.addChild(this.secondStep);
+	    }
+	    Dino.prototype.animateTRex = function () {
+	        var _this = this;
+	        var i = 0;
+	        _this.visual.visible = false;
+	        _this.firstStep.visible = false;
+	        _this.secondStep.visible = false;
+	        setInterval(function () {
+	            i++;
+	            if (i % 2 == 0) {
+	                _this.firstStep.visible = true;
+	                _this.secondStep.visible = false;
+	            }
+	            else {
+	                _this.firstStep.visible = false;
+	                _this.secondStep.visible = true;
+	            }
+	        }, 100);
 	    };
 	    return Dino;
 	}());
