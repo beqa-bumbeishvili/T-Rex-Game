@@ -11,12 +11,12 @@ class Dino {
         this.firstStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep1"].texture);
         this.firstStep.width = 42;
         this.firstStep.height = 45;
-        this.firstStep.position.set(30, 80);
+        this.firstStep.position.set(30, 90);
         this.firstStep.visible = false;
         this.secondStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep2"].texture);
         this.secondStep.width = 42;
         this.secondStep.height = 45;
-        this.secondStep.position.set(30, 80);
+        this.secondStep.position.set(30, 90);
         this.secondStep.visible = false;
         this.jumpInterval = false;
         this.stage.addChild(this.defaultAppearance);
@@ -28,7 +28,7 @@ class Dino {
         this.defaultAppearance = new PIXI.Sprite(PIXI.loader.resources["T-RexNormal"].texture);
         this.defaultAppearance.width = 42;
         this.defaultAppearance.height = 45;
-        this.defaultAppearance.position.set(30, 80);
+        this.defaultAppearance.position.set(30, 90);
     }
 
     public animateTRex() {
@@ -63,7 +63,7 @@ class Dino {
             else {
                 _this.defaultAppearance.y += 2;
             }
-            if (_this.defaultAppearance.y == 80) {
+            if (_this.defaultAppearance.y == 90) {
                 _this.animateTRex();
                 clearInterval(_this.jumpInterval);
                 _this.jumpInterval = false;
