@@ -7,17 +7,9 @@ class Dino {
     public jumpInterval: any;
     constructor(stage) {
         this.stage = stage;
-        this.setDefaultAppearance();
-        this.firstStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep1"].texture);
-        this.firstStep.width = 42;
-        this.firstStep.height = 45;
-        this.firstStep.position.set(30, 90);
-        this.firstStep.visible = false;
-        this.secondStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep2"].texture);
-        this.secondStep.width = 42;
-        this.secondStep.height = 45;
-        this.secondStep.position.set(30, 90);
-        this.secondStep.visible = false;
+        this.setDefaultAppearance();  
+        this.firstStepAppearance();
+        this.secondStepAppearance();
         this.jumpInterval = false;
         this.stage.addChild(this.defaultAppearance);
         this.stage.addChild(this.firstStep);
@@ -29,6 +21,22 @@ class Dino {
         this.defaultAppearance.width = 42;
         this.defaultAppearance.height = 45;
         this.defaultAppearance.position.set(30, 90);
+    }
+
+    firstStepAppearance(){
+        this.firstStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep1"].texture);
+        this.firstStep.width = 42;
+        this.firstStep.height = 45;
+        this.firstStep.position.set(30, 90);
+        this.firstStep.visible = false;
+    }
+
+    secondStepAppearance(){      
+        this.secondStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep2"].texture);
+        this.secondStep.width = 42;
+        this.secondStep.height = 45;
+        this.secondStep.position.set(30, 90);
+        this.secondStep.visible = false;
     }
 
     public animateTRex() {

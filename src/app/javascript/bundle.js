@@ -83,47 +83,68 @@
 	    function TRexGame(stage, renderer) {
 	        this.renderer = renderer;
 	        this.stage = stage;
-	        this.road = new PIXI.Sprite(PIXI.loader.resources["path"].texture);
-	        this.road.position.set(0, 130);
-	        this.road.width = this.renderer.width * 2;
-	        this.obstacles = new PIXI.Container();
-	        this.obstacles.addChild(new PIXI.Sprite(PIXI.loader.resources["one"].texture));
-	        this.obstacles.addChild(new PIXI.Sprite(PIXI.loader.resources["two"].texture));
-	        this.obstacles.addChild(new PIXI.Sprite(PIXI.loader.resources["three"].texture));
-	        this.obstacles.getChildAt(0).position.set(580, 108);
-	        this.obstacles.getChildAt(0).visible = true;
-	        this.obstacles.getChildAt(1).position.set(580, 108);
-	        this.obstacles.getChildAt(1).visible = false;
-	        this.obstacles.getChildAt(2).position.set(580, 108);
-	        this.obstacles.getChildAt(2).visible = false;
+	        this.buildRoad();
+	        this.buildObstacles();
 	        this.stage.addChild(this.road);
 	        this.dino = new Dino(this.stage);
 	        this.stage.addChild(this.obstacles);
 	        this.dino.animateTRex();
 	        this.animateRoad();
 	        this.showObstacles();
-	        this.jumpEvent();
+	        this.listenJumpEvent();
 	    }
+	    TRexGame.prototype.buildRoad = function () {
+	        this.road = new PIXI.Sprite(PIXI.loader.resources["path"].texture);
+	        this.road.position.set(0, 130);
+	        this.road.width = this.renderer.width * 2;
+	    };
+	    TRexGame.prototype.buildObstacles = function () {
+	        this.obstacles = new PIXI.Container();
+	        this.obstacles.addChild(new PIXI.Sprite(PIXI.loader.resources["one"].texture));
+	        this.obstacles.addChild(new PIXI.Sprite(PIXI.loader.resources["two"].texture));
+	        this.obstacles.addChild(new PIXI.Sprite(PIXI.loader.resources["three"].texture));
+	        this.obstacles.getChildAt(0).position.set(580, 108);
+	        this.obstacles.getChildAt(0).visible = true;
+	        this.currentObstacle = this.obstacles.getChildAt(0);
+	        this.obstacles.getChildAt(1).position.set(580, 108);
+	        this.obstacles.getChildAt(1).visible = false;
+	        this.obstacles.getChildAt(2).position.set(580, 108);
+	        this.obstacles.getChildAt(2).visible = false;
+	    };
+	    TRexGame.prototype.crashTest = function () {
+	        if (this.currentObstacle.x < (this.dino.firstStep.x + 40) && (this.currentObstacle.x > this.dino.firstStep.x + 2))
+	            if (this.dino.defaultAppearance.y + 45 > this.currentObstacle.y) {
+	                alert('crash!');
+	            }
+	    };
 	    TRexGame.prototype.showObstacles = function () {
 	        var _this = this;
 	        var i = 0;
 	        setInterval(function () {
+	            _this.crashTest();
 	            _this.obstacles.getChildAt(0).x -= 2;
 	            if (_this.obstacles.getChildAt(0).x < 400) {
 	                _this.obstacles.getChildAt(1).visible = true;
+	                if (_this.obstacles.getChildAt(0).x < 80)
+	                    _this.currentObstacle = _this.obstacles.getChildAt(0);
 	            }
 	            if (_this.obstacles.getChildAt(1).visible == true)
 	                _this.obstacles.getChildAt(1).x -= 2;
 	            if (_this.obstacles.getChildAt(1).x < 400) {
 	                _this.obstacles.getChildAt(2).visible = true;
+	                if (_this.obstacles.getChildAt(1).x < 80)
+	                    _this.currentObstacle = _this.obstacles.getChildAt(1);
 	            }
-	            if (_this.obstacles.getChildAt(2).visible == true)
+	            if (_this.obstacles.getChildAt(2).visible == true) {
 	                _this.obstacles.getChildAt(2).x -= 2;
-	            if (_this.obstacles.getChildAt(0).x < -10)
+	                if (_this.obstacles.getChildAt(1).x < 80)
+	                    _this.currentObstacle = _this.obstacles.getChildAt(2);
+	            }
+	            if (_this.obstacles.getChildAt(0).x < -20)
 	                _this.obstacles.getChildAt(0).x = 580;
-	            if (_this.obstacles.getChildAt(1).x < -10)
+	            if (_this.obstacles.getChildAt(1).x < -20)
 	                _this.obstacles.getChildAt(1).x = 580;
-	            if (_this.obstacles.getChildAt(2).x < -10)
+	            if (_this.obstacles.getChildAt(2).x < -20)
 	                _this.obstacles.getChildAt(2).x = 580;
 	        }, 10);
 	    };
@@ -137,9 +158,9 @@
 	                _this.road.x = 0;
 	                i = 0;
 	            }
-	        }, 10);
+	        }, 5);
 	    };
-	    TRexGame.prototype.jumpEvent = function () {
+	    TRexGame.prototype.listenJumpEvent = function () {
 	        var _this = this;
 	        window.addEventListener("keydown", function (event) {
 	            switch (event.keyCode) {
@@ -170,16 +191,8 @@
 	    function Dino(stage) {
 	        this.stage = stage;
 	        this.setDefaultAppearance();
-	        this.firstStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep1"].texture);
-	        this.firstStep.width = 42;
-	        this.firstStep.height = 45;
-	        this.firstStep.position.set(30, 90);
-	        this.firstStep.visible = false;
-	        this.secondStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep2"].texture);
-	        this.secondStep.width = 42;
-	        this.secondStep.height = 45;
-	        this.secondStep.position.set(30, 90);
-	        this.secondStep.visible = false;
+	        this.firstStepAppearance();
+	        this.secondStepAppearance();
 	        this.jumpInterval = false;
 	        this.stage.addChild(this.defaultAppearance);
 	        this.stage.addChild(this.firstStep);
@@ -190,6 +203,20 @@
 	        this.defaultAppearance.width = 42;
 	        this.defaultAppearance.height = 45;
 	        this.defaultAppearance.position.set(30, 90);
+	    };
+	    Dino.prototype.firstStepAppearance = function () {
+	        this.firstStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep1"].texture);
+	        this.firstStep.width = 42;
+	        this.firstStep.height = 45;
+	        this.firstStep.position.set(30, 90);
+	        this.firstStep.visible = false;
+	    };
+	    Dino.prototype.secondStepAppearance = function () {
+	        this.secondStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep2"].texture);
+	        this.secondStep.width = 42;
+	        this.secondStep.height = 45;
+	        this.secondStep.position.set(30, 90);
+	        this.secondStep.visible = false;
 	    };
 	    Dino.prototype.animateTRex = function () {
 	        var _this = this;
