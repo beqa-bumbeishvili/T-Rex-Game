@@ -68,6 +68,8 @@
 	    .add("two", "app/assets/obstacles/2.png")
 	    .add("three", "app/assets/obstacles/3.png")
 	    .add("path", "app/assets/way/path.png")
+	    .add("cloud", "app/assets/resources/cloud.png")
+	    .add("gameOver", "app/assets/resources/gameOver.png")
 	    .load(function () {
 	    var game = new TRexGame(stage, renderer);
 	});
@@ -89,10 +91,21 @@
 	        this.dino = new Dino(this.stage);
 	        this.stage.addChild(this.obstacles);
 	        this.dino.animateTRex();
+	        this.addClouds();
 	        this.animateRoad();
 	        this.showObstacles();
 	        this.listenJumpEvent();
 	    }
+	    TRexGame.prototype.addClouds = function () {
+	        this.clouds = new PIXI.Container;
+	        this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
+	        this.clouds.getChildAt(0).position.set(100, 40);
+	        this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
+	        this.clouds.getChildAt(1).position.set(250, 20);
+	        this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
+	        this.clouds.getChildAt(2).position.set(480, 50);
+	        this.stage.addChild(this.clouds);
+	    };
 	    TRexGame.prototype.buildRoad = function () {
 	        this.road = new PIXI.Sprite(PIXI.loader.resources["path"].texture);
 	        this.road.position.set(0, 130);

@@ -7,6 +7,7 @@ class TRexGame {
     road: PIXI.Sprite;
     obstacles: PIXI.Container;
     currentObstacle: any;
+    clouds:PIXI.Container;
     bird: PIXI.Sprite;
     constructor(stage, renderer) {
         this.renderer = renderer;
@@ -17,10 +18,24 @@ class TRexGame {
         this.dino = new Dino(this.stage);
         this.stage.addChild(this.obstacles);
         this.dino.animateTRex();
+        this.addClouds();
         this.animateRoad();
         this.showObstacles();
         this.listenJumpEvent();
     }
+
+    addClouds(){
+        this.clouds = new PIXI.Container;
+        this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
+        this.clouds.getChildAt(0).position.set(100,40);
+        this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
+        this.clouds.getChildAt(1).position.set(250,20);
+        this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
+        this.clouds.getChildAt(2).position.set(480,50);
+        this.stage.addChild(this.clouds);
+    }
+
+
 
     buildRoad() {
         this.road = new PIXI.Sprite(PIXI.loader.resources["path"].texture);
