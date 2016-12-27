@@ -1,6 +1,7 @@
 class Dino {
     stage: PIXI.Container;
     defaultAppearance: PIXI.Sprite;
+    crashAppearance: PIXI.Sprite;
     firstStep: PIXI.Sprite;
     secondStep: PIXI.Sprite;
     walkInterval: any;
@@ -10,10 +11,12 @@ class Dino {
         this.setDefaultAppearance();  
         this.firstStepAppearance();
         this.secondStepAppearance();
+        this.setCrashAppearance();
         this.jumpInterval = false;
         this.stage.addChild(this.defaultAppearance);
         this.stage.addChild(this.firstStep);
         this.stage.addChild(this.secondStep);
+        this.stage.addChild(this.crashAppearance);
     }
 
     setDefaultAppearance() {
@@ -37,6 +40,14 @@ class Dino {
         this.secondStep.height = 45;
         this.secondStep.position.set(30, 90);
         this.secondStep.visible = false;
+    }
+
+    setCrashAppearance() {
+        this.crashAppearance = new PIXI.Sprite(PIXI.loader.resources["crash"].texture);
+        this.crashAppearance.width = 42;
+        this.crashAppearance.height = 45;
+        this.crashAppearance.position.set(30, 90);
+        this.crashAppearance.visible = false;
     }
 
     public animateTRex() {
