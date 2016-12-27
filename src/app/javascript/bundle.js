@@ -90,6 +90,7 @@
 	        this.obstaclesInterval = false;
 	        this.buildRoad();
 	        this.buildObstacles();
+	        this.setScoreCounter();
 	        this.stage.addChild(this.road);
 	        this.dino = new Dino(this.stage);
 	        this.stage.addChild(this.obstacles);
@@ -108,6 +109,18 @@
 	        this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
 	        this.clouds.getChildAt(2).position.set(480, 50);
 	        this.stage.addChild(this.clouds);
+	    };
+	    TRexGame.prototype.setScoreCounter = function () {
+	        var textStyle = {
+	            //  fontFamily: 'Arial',
+	            fontSize: '15px',
+	            //   fontStyle: 'italic',
+	            // fontWeight: 'bold',
+	            fill: '#737373'
+	        };
+	        this.scoreCounter = new PIXI.Text("000000", textStyle);
+	        this.scoreCounter.position.set(500, 5);
+	        this.stage.addChild(this.scoreCounter);
 	    };
 	    TRexGame.prototype.buildRoad = function () {
 	        this.road = new PIXI.Sprite(PIXI.loader.resources["path"].texture);
@@ -179,9 +192,12 @@
 	    TRexGame.prototype.animateRoad = function () {
 	        var _this = this;
 	        var i = 0;
+	        var scoreCounter = 0;
 	        this.roadInterval = setInterval(function () {
+	            _this.scoreCounter.text = "" + Math.ceil(scoreCounter / 10);
 	            _this.road.x--;
 	            i++;
+	            scoreCounter++;
 	            if (i == _this.road.width / 2) {
 	                _this.road.x = 0;
 	                i = 0;

@@ -10,6 +10,7 @@ class TRexGame {
     clouds: PIXI.Container;
     roadInterval: any;
     obstaclesInterval: any;
+    scoreCounter: PIXI.Text;
     constructor(stage, renderer) {
         this.renderer = renderer;
         this.stage = stage;
@@ -17,6 +18,7 @@ class TRexGame {
         this.obstaclesInterval = false;
         this.buildRoad();
         this.buildObstacles();
+        this.setScoreCounter();
         this.stage.addChild(this.road);
         this.dino = new Dino(this.stage);
         this.stage.addChild(this.obstacles);
@@ -38,7 +40,20 @@ class TRexGame {
         this.stage.addChild(this.clouds);
     }
 
-
+    setScoreCounter(){
+                var textStyle = {
+          //  fontFamily: 'Arial',
+            fontSize: '15px',
+         //   fontStyle: 'italic',
+           // fontWeight: 'bold',
+            fill: '#737373',
+           // stroke: '#737373'
+        };
+        
+        this.scoreCounter = new PIXI.Text("000000", textStyle);
+        this.scoreCounter.position.set(500,5);
+        this.stage.addChild(this.scoreCounter);
+    }
 
     buildRoad() {
         this.road = new PIXI.Sprite(PIXI.loader.resources["path"].texture);
@@ -67,17 +82,17 @@ class TRexGame {
             }
     }
 
-    stopGame(){
-                clearInterval(this.dino.walkInterval);
-                clearInterval(this.dino.jumpInterval);
-                clearInterval(this.roadInterval);
-                clearInterval(this.obstaclesInterval);
-                this.dino.defaultAppearance.visible = false;
-                this.dino.firstStep.visible = false;
-                this.dino.secondStep.visible = false;
-                if (this.dino.defaultAppearance.y < 90)
-                    this.dino.crashAppearance.y = this.dino.defaultAppearance.y;
-                this.dino.crashAppearance.visible = true;
+    stopGame() {
+        clearInterval(this.dino.walkInterval);
+        clearInterval(this.dino.jumpInterval);
+        clearInterval(this.roadInterval);
+        clearInterval(this.obstaclesInterval);
+        this.dino.defaultAppearance.visible = false;
+        this.dino.firstStep.visible = false;
+        this.dino.secondStep.visible = false;
+        if (this.dino.defaultAppearance.y < 90)
+            this.dino.crashAppearance.y = this.dino.defaultAppearance.y;
+        this.dino.crashAppearance.visible = true;
     }
 
     showObstacles() {
@@ -122,9 +137,12 @@ class TRexGame {
     animateRoad() {
         let _this = this;
         let i = 0;
+        let scoreCounter = 0;
         this.roadInterval = setInterval(function () {
+            _this.scoreCounter.text =""+Math.ceil(scoreCounter/10);
             _this.road.x--;
             i++;
+            scoreCounter++;
             if (i == _this.road.width / 2) {
                 _this.road.x = 0;
                 i = 0;
