@@ -72,6 +72,7 @@
 	    .add("cloud", "app/assets/resources/cloud.png")
 	    .add("restart", "app/assets/resources/restart.png")
 	    .add("gameOver", "app/assets/resources/gameOver.png")
+	    .add("hitSound", "app/assets/sounds/hit.mp3")
 	    .load(function () {
 	    var game = new TRexGame(stage, renderer);
 	});
@@ -82,7 +83,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	0;
 	var Dino = __webpack_require__(3);
 	var TRexGame = (function () {
 	    function TRexGame(stage, renderer) {
@@ -129,14 +129,11 @@
 	    };
 	    TRexGame.prototype.setScoreCounter = function () {
 	        var textStyle = {
-	            //  fontFamily: 'Arial',
 	            fontSize: '15px',
-	            //   fontStyle: 'italic',
-	            // fontWeight: 'bold',
 	            fill: '#737373'
 	        };
-	        this.scoreCounter = new PIXI.Text("000000", textStyle);
-	        this.scoreCounter.position.set(500, 5);
+	        this.scoreCounter = new PIXI.Text("0", textStyle);
+	        this.scoreCounter.position.set(530, 5);
 	        this.stage.addChild(this.scoreCounter);
 	    };
 	    TRexGame.prototype.buildRoad = function () {
@@ -160,6 +157,7 @@
 	    TRexGame.prototype.crashTest = function () {
 	        if (this.currentObstacle.x < (this.dino.firstStep.x + 40) && (this.currentObstacle.x > this.dino.firstStep.x + 2))
 	            if (this.dino.defaultAppearance.y + 45 > this.currentObstacle.y) {
+	                //   window.removeEventListener("keydown", );    
 	                this.stopGame();
 	            }
 	    };
@@ -182,21 +180,21 @@
 	        this.obstaclesInterval = setInterval(function () {
 	            _this.crashTest();
 	            _this.obstacles.getChildAt(0).x -= 2;
-	            if (_this.obstacles.getChildAt(0).x < 400) {
+	            if (_this.obstacles.getChildAt(0).x < 370) {
 	                _this.obstacles.getChildAt(1).visible = true;
 	                if (_this.obstacles.getChildAt(0).x < 80)
 	                    _this.currentObstacle = _this.obstacles.getChildAt(0);
 	            }
 	            if (_this.obstacles.getChildAt(1).visible == true)
 	                _this.obstacles.getChildAt(1).x -= 2;
-	            if (_this.obstacles.getChildAt(1).x < 400) {
+	            if (_this.obstacles.getChildAt(1).x < 370) {
 	                _this.obstacles.getChildAt(2).visible = true;
 	                if (_this.obstacles.getChildAt(1).x < 80)
 	                    _this.currentObstacle = _this.obstacles.getChildAt(1);
 	            }
 	            if (_this.obstacles.getChildAt(2).visible == true) {
 	                _this.obstacles.getChildAt(2).x -= 2;
-	                if (_this.obstacles.getChildAt(1).x < 80)
+	                if (_this.obstacles.getChildAt(2).x < 80)
 	                    _this.currentObstacle = _this.obstacles.getChildAt(2);
 	            }
 	            if (_this.obstacles.getChildAt(0).x < -20)
@@ -205,7 +203,7 @@
 	                _this.obstacles.getChildAt(1).x = 580;
 	            if (_this.obstacles.getChildAt(2).x < -20)
 	                _this.obstacles.getChildAt(2).x = 580;
-	        }, 10);
+	        }, 8);
 	    };
 	    TRexGame.prototype.animateRoad = function () {
 	        var _this = this;
@@ -220,19 +218,19 @@
 	                _this.road.x = 0;
 	                i = 0;
 	            }
-	        }, 5);
+	        }, 4);
 	    };
 	    TRexGame.prototype.listenJumpEvent = function () {
 	        var _this = this;
 	        window.addEventListener("keydown", function (event) {
 	            switch (event.keyCode) {
 	                case 32: {
-	                    if (_this.dino.jumpInterval == false)
+	                    if (_this.dino.jumpInterval == false && _this.dino.crashAppearance.visible == false)
 	                        _this.dino.jump();
 	                    break;
 	                }
 	                case 38: {
-	                    if (_this.dino.jumpInterval == false)
+	                    if (_this.dino.jumpInterval == false && _this.dino.crashAppearance.visible == false)
 	                        _this.dino.jump();
 	                    break;
 	                }
@@ -266,27 +264,27 @@
 	        this.defaultAppearance = new PIXI.Sprite(PIXI.loader.resources["T-RexNormal"].texture);
 	        this.defaultAppearance.width = 42;
 	        this.defaultAppearance.height = 45;
-	        this.defaultAppearance.position.set(30, 90);
+	        this.defaultAppearance.position.set(30, 100);
 	    };
 	    Dino.prototype.firstStepAppearance = function () {
 	        this.firstStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep1"].texture);
 	        this.firstStep.width = 42;
 	        this.firstStep.height = 45;
-	        this.firstStep.position.set(30, 90);
+	        this.firstStep.position.set(30, 100);
 	        this.firstStep.visible = false;
 	    };
 	    Dino.prototype.secondStepAppearance = function () {
 	        this.secondStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep2"].texture);
 	        this.secondStep.width = 42;
 	        this.secondStep.height = 45;
-	        this.secondStep.position.set(30, 90);
+	        this.secondStep.position.set(30, 100);
 	        this.secondStep.visible = false;
 	    };
 	    Dino.prototype.setCrashAppearance = function () {
 	        this.crashAppearance = new PIXI.Sprite(PIXI.loader.resources["crash"].texture);
 	        this.crashAppearance.width = 42;
 	        this.crashAppearance.height = 45;
-	        this.crashAppearance.position.set(30, 90);
+	        this.crashAppearance.position.set(30, 100);
 	        this.crashAppearance.visible = false;
 	    };
 	    Dino.prototype.animateTRex = function () {
@@ -312,15 +310,23 @@
 	        this.defaultAppearance.visible = true;
 	        var _this = this;
 	        var i = 0;
+	        //let sound = PIXI.audioManager.getAudio("hitSound");
+	        // sound.play();
 	        this.jumpInterval = setInterval(function () {
 	            i++;
-	            if (i < 40) {
-	                _this.defaultAppearance.y -= 2;
+	            if (i < 35) {
+	                if (i < 25)
+	                    _this.defaultAppearance.y -= 3;
+	                else
+	                    _this.defaultAppearance.y -= 2;
 	            }
 	            else {
-	                _this.defaultAppearance.y += 2;
+	                if (i >= 35 && i < 50)
+	                    _this.defaultAppearance.y += 2;
+	                else
+	                    _this.defaultAppearance.y += 3;
 	            }
-	            if (_this.defaultAppearance.y == 90) {
+	            if (_this.defaultAppearance.y >= 100) {
 	                _this.animateTRex();
 	                clearInterval(_this.jumpInterval);
 	                _this.jumpInterval = false;

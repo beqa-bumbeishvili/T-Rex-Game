@@ -21,6 +21,7 @@ loader
     .add("cloud", "app/assets/resources/cloud.png")
     .add("restart", "app/assets/resources/restart.png")
     .add("gameOver", "app/assets/resources/gameOver.png")
+    .add("hitSound", "app/assets/sounds/hit.mp3")
     .load(function () { 
     let game = new TRexGame(stage, renderer);
  });

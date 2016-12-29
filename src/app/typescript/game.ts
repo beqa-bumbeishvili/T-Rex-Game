@@ -1,4 +1,4 @@
-0import Dino = require("./dino.ts");
+import Dino = require("./dino.ts");
 
 class TRexGame {
     renderer: any;
@@ -58,17 +58,13 @@ class TRexGame {
     }
 
     setScoreCounter(){
-                var textStyle = {
-          //  fontFamily: 'Arial',
+        let textStyle = {
             fontSize: '15px',
-         //   fontStyle: 'italic',
-           // fontWeight: 'bold',
-            fill: '#737373',
-           // stroke: '#737373'
+            fill: '#737373'
         };
         
-        this.scoreCounter = new PIXI.Text("000000", textStyle);
-        this.scoreCounter.position.set(500,5);
+        this.scoreCounter = new PIXI.Text("0", textStyle);
+        this.scoreCounter.position.set(530,5);
         this.stage.addChild(this.scoreCounter);
     }
 
@@ -95,7 +91,8 @@ class TRexGame {
     crashTest() {
         if (this.currentObstacle.x < (this.dino.firstStep.x + 40) && (this.currentObstacle.x > this.dino.firstStep.x + 2))
             if (this.dino.defaultAppearance.y + 45 > this.currentObstacle.y) {
-                this.stopGame();
+             //   window.removeEventListener("keydown", );    
+             this.stopGame();        
             }
     }
 
@@ -120,7 +117,7 @@ class TRexGame {
             _this.crashTest();
             _this.obstacles.getChildAt(0).x -= 2;
 
-            if (_this.obstacles.getChildAt(0).x < 400) {
+            if (_this.obstacles.getChildAt(0).x < 370) {
                 _this.obstacles.getChildAt(1).visible = true;
                 if (_this.obstacles.getChildAt(0).x < 80)
                     _this.currentObstacle = _this.obstacles.getChildAt(0);
@@ -129,7 +126,7 @@ class TRexGame {
             if (_this.obstacles.getChildAt(1).visible == true)
                 _this.obstacles.getChildAt(1).x -= 2;
 
-            if (_this.obstacles.getChildAt(1).x < 400) {
+            if (_this.obstacles.getChildAt(1).x < 370) {
                 _this.obstacles.getChildAt(2).visible = true;
                 if (_this.obstacles.getChildAt(1).x < 80)
                     _this.currentObstacle = _this.obstacles.getChildAt(1);
@@ -137,7 +134,7 @@ class TRexGame {
 
             if (_this.obstacles.getChildAt(2).visible == true) {
                 _this.obstacles.getChildAt(2).x -= 2;
-                if (_this.obstacles.getChildAt(1).x < 80)
+                if (_this.obstacles.getChildAt(2).x < 80)
                     _this.currentObstacle = _this.obstacles.getChildAt(2);
             }
 
@@ -149,7 +146,7 @@ class TRexGame {
 
             if (_this.obstacles.getChildAt(2).x < -20)
                 _this.obstacles.getChildAt(2).x = 580;
-        }, 10)
+        }, 8)
     }
 
     animateRoad() {
@@ -165,7 +162,7 @@ class TRexGame {
                 _this.road.x = 0;
                 i = 0;
             }
-        }, 5)
+        }, 4)
     }
 
     listenJumpEvent() {
@@ -173,12 +170,12 @@ class TRexGame {
         window.addEventListener("keydown", function (event) {
             switch (event.keyCode) {
                 case 32: {
-                    if (_this.dino.jumpInterval == false)
+                    if (_this.dino.jumpInterval == false && _this.dino.crashAppearance.visible == false)   
                         _this.dino.jump();
                     break;
                 }
                 case 38: {
-                    if (_this.dino.jumpInterval == false)
+                    if (_this.dino.jumpInterval == false && _this.dino.crashAppearance.visible == false)
                         _this.dino.jump();
                     break;
                 }

@@ -8,7 +8,7 @@ class Dino {
     public jumpInterval: any;
     constructor(stage) {
         this.stage = stage;
-        this.setDefaultAppearance();  
+        this.setDefaultAppearance();
         this.firstStepAppearance();
         this.secondStepAppearance();
         this.setCrashAppearance();
@@ -23,22 +23,22 @@ class Dino {
         this.defaultAppearance = new PIXI.Sprite(PIXI.loader.resources["T-RexNormal"].texture);
         this.defaultAppearance.width = 42;
         this.defaultAppearance.height = 45;
-        this.defaultAppearance.position.set(30, 90);
+        this.defaultAppearance.position.set(30, 100);
     }
 
-    firstStepAppearance(){
+    firstStepAppearance() {
         this.firstStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep1"].texture);
         this.firstStep.width = 42;
         this.firstStep.height = 45;
-        this.firstStep.position.set(30, 90);
+        this.firstStep.position.set(30, 100);
         this.firstStep.visible = false;
     }
 
-    secondStepAppearance(){      
+    secondStepAppearance() {
         this.secondStep = new PIXI.Sprite(PIXI.loader.resources["T-RexStep2"].texture);
         this.secondStep.width = 42;
         this.secondStep.height = 45;
-        this.secondStep.position.set(30, 90);
+        this.secondStep.position.set(30, 100);
         this.secondStep.visible = false;
     }
 
@@ -46,7 +46,7 @@ class Dino {
         this.crashAppearance = new PIXI.Sprite(PIXI.loader.resources["crash"].texture);
         this.crashAppearance.width = 42;
         this.crashAppearance.height = 45;
-        this.crashAppearance.position.set(30, 90);
+        this.crashAppearance.position.set(30, 100);
         this.crashAppearance.visible = false;
     }
 
@@ -74,15 +74,21 @@ class Dino {
         this.defaultAppearance.visible = true;
         let _this = this;
         let i = 0;
+        //let sound = PIXI.audioManager.getAudio("hitSound");
+       // sound.play();
         this.jumpInterval = setInterval(function () {
             i++;
-            if (i < 40) {
-                _this.defaultAppearance.y -= 2;
+            if (i < 35) {
+                if (i < 25)
+                    _this.defaultAppearance.y -= 3;
+                else _this.defaultAppearance.y -= 2;
             }
             else {
-                _this.defaultAppearance.y += 2;
+                if (i >=35 && i < 50)
+                    _this.defaultAppearance.y += 2;
+                else _this.defaultAppearance.y += 3;
             }
-            if (_this.defaultAppearance.y == 90) {
+            if (_this.defaultAppearance.y >= 100) {
                 _this.animateTRex();
                 clearInterval(_this.jumpInterval);
                 _this.jumpInterval = false;
