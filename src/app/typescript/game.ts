@@ -1,4 +1,4 @@
-import Dino = require("./dino.ts");
+0import Dino = require("./dino.ts");
 
 class TRexGame {
     renderer: any;
@@ -29,12 +29,29 @@ class TRexGame {
         this.listenJumpEvent();
     }
 
+    gameOver(){
+        let _this = this;
+        let gameOverMessage = new PIXI.Sprite(PIXI.loader.resources["gameOver"].texture);
+        gameOverMessage.position.set(210,33);
+        let restartButton = new PIXI.Sprite(PIXI.loader.resources["restart"].texture);
+        restartButton.position.set(288,65);
+        this.stage.addChild(gameOverMessage);
+        this.stage.addChild(restartButton);
+        this.stage.getChildAt(this.stage.children.length - 1).interactive = true;
+        this.stage.getChildAt(this.stage.children.length - 1).buttonMode = true;
+        this.stage.getChildAt(this.stage.children.length - 1).click = function(){
+            _this.stage.removeChildren();
+            let game = new TRexGame(_this.stage, _this.renderer);
+        }
+    }
+
+
     addClouds() {
         this.clouds = new PIXI.Container;
         this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
         this.clouds.getChildAt(0).position.set(100, 40);
         this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
-        this.clouds.getChildAt(1).position.set(250, 20);
+        this.clouds.getChildAt(1).position.set(250, 10);
         this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
         this.clouds.getChildAt(2).position.set(480, 50);
         this.stage.addChild(this.clouds);
@@ -93,6 +110,7 @@ class TRexGame {
         if (this.dino.defaultAppearance.y < 90)
             this.dino.crashAppearance.y = this.dino.defaultAppearance.y;
         this.dino.crashAppearance.visible = true;
+        this.gameOver();
     }
 
     showObstacles() {

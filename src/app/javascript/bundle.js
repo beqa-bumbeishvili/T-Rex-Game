@@ -70,6 +70,7 @@
 	    .add("three", "app/assets/obstacles/3.png")
 	    .add("path", "app/assets/way/path.png")
 	    .add("cloud", "app/assets/resources/cloud.png")
+	    .add("restart", "app/assets/resources/restart.png")
 	    .add("gameOver", "app/assets/resources/gameOver.png")
 	    .load(function () {
 	    var game = new TRexGame(stage, renderer);
@@ -81,6 +82,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	0;
 	var Dino = __webpack_require__(3);
 	var TRexGame = (function () {
 	    function TRexGame(stage, renderer) {
@@ -100,12 +102,27 @@
 	        this.showObstacles();
 	        this.listenJumpEvent();
 	    }
+	    TRexGame.prototype.gameOver = function () {
+	        var _this = this;
+	        var gameOverMessage = new PIXI.Sprite(PIXI.loader.resources["gameOver"].texture);
+	        gameOverMessage.position.set(210, 33);
+	        var restartButton = new PIXI.Sprite(PIXI.loader.resources["restart"].texture);
+	        restartButton.position.set(288, 65);
+	        this.stage.addChild(gameOverMessage);
+	        this.stage.addChild(restartButton);
+	        this.stage.getChildAt(this.stage.children.length - 1).interactive = true;
+	        this.stage.getChildAt(this.stage.children.length - 1).buttonMode = true;
+	        this.stage.getChildAt(this.stage.children.length - 1).click = function () {
+	            _this.stage.removeChildren();
+	            var game = new TRexGame(_this.stage, _this.renderer);
+	        };
+	    };
 	    TRexGame.prototype.addClouds = function () {
 	        this.clouds = new PIXI.Container;
 	        this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
 	        this.clouds.getChildAt(0).position.set(100, 40);
 	        this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
-	        this.clouds.getChildAt(1).position.set(250, 20);
+	        this.clouds.getChildAt(1).position.set(250, 10);
 	        this.clouds.addChild(new PIXI.Sprite(PIXI.loader.resources["cloud"].texture));
 	        this.clouds.getChildAt(2).position.set(480, 50);
 	        this.stage.addChild(this.clouds);
@@ -157,6 +174,7 @@
 	        if (this.dino.defaultAppearance.y < 90)
 	            this.dino.crashAppearance.y = this.dino.defaultAppearance.y;
 	        this.dino.crashAppearance.visible = true;
+	        this.gameOver();
 	    };
 	    TRexGame.prototype.showObstacles = function () {
 	        var _this = this;

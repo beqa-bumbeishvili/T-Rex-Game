@@ -19,6 +19,7 @@ loader
     .add("three", "app/assets/obstacles/3.png")
     .add("path", "app/assets/way/path.png")
     .add("cloud", "app/assets/resources/cloud.png")
+    .add("restart", "app/assets/resources/restart.png")
     .add("gameOver", "app/assets/resources/gameOver.png")
     .load(function () { 
     let game = new TRexGame(stage, renderer);
